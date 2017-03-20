@@ -9,7 +9,7 @@ import Queue
 from dotenv import Dotenv
 from crawler import Crawler, CrawlerError
 from emailer import Emailer, EmailerError
-from oauth2client.service_account import ServiceAccountCredentials
+# from oauth2client.service_account import ServiceAccountCredentials
 
 
 if __name__ == "__main__":
@@ -18,14 +18,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Warm the cache of highly trafficed pages.')
     parser.add_argument(
-        '-s', '--sitemap', metavar='', type=str,
-        help='The http link to the sitemap.xml file.')
+        '-sdb', '--sitemapdb', metavar='', type=str, required=True,
+        help='The location of the sitemap SQLite DB.')
     parser.add_argument(
-        '-i', '--id', metavar='', type=int,
-        help='The unique Analytics view (profile ID).')
-    parser.add_argument(
-        '-o', '--offset', metavar='', type=int,
-        help=('The number of items to offset. (only works with sitemap.xml)'))
+        '-sid', '--sitemapid', metavar='', type=str, required=True,
+        help='The FQDN ID of the sitemap entry in SQLite DB.')
 
     req_parser = parser.add_argument_group('required arguments')
     req_parser.add_argument(
@@ -38,9 +35,9 @@ if __name__ == "__main__":
     PATH = os.path.dirname(os.path.realpath(__file__))
 
     # check if warming sitemap or google analytics
-    if args.id is None and args.sitemap is None:
-        print ('ERROR! You must either specify a Google Analytics ID'
-               ' or a Sitemap.XML file argument to continue.')
+    if args.sitemapid is None and args.sitemapdb is None:
+        print ('ERROR! You must specify the FQDN ID and '
+               'sitemap.db file argument to continue.')
         sys.exit(-1)
 
     # check that .env exits and load variables
@@ -80,7 +77,7 @@ if __name__ == "__main__":
         offset = args.offset if (args.offset is not None) else 0
         crawler.sitemap_crawler(args.sitemap, args.count, offset)
     else:
-        crawler.google_crawler('ga:%i' % args.id, args.count)
+	sys.exit(-1)	
 
     # multithreaded cache warmer
     delay = float(os.environ.get('DELAY', 500))

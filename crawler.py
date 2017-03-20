@@ -3,9 +3,10 @@ import sys
 import time
 import csv
 import os
+import sqlite3
 from dotenv import Dotenv
 from xml.etree import ElementTree
-from oauth2client.service_account import ServiceAccountCredentials
+# from oauth2client.service_account import ServiceAccountCredentials
 
 
 class CrawlerError(Exception):
@@ -19,7 +20,7 @@ class Crawler:
     urls = []
     path = path = os.path.dirname(os.path.realpath(__file__))
     headers = {'User-Agent':
-               'Mozilla/5.0 (compatible; DenisonBot; +http://denison.edu/)'}
+               'Mozilla/5.0 (compatible; Cachoid; +https://www.cachoid.com/)'}
 
     def warm_url(self, url):
         try:
