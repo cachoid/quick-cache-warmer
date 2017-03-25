@@ -18,9 +18,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Warm the cache of highly trafficed pages.')
     parser.add_argument(
-        '-sdb', '--sitemapdb', metavar='', type=str, required=True,
-        help='The location of the sitemap SQLite DB.')
-    parser.add_argument(
         '-sid', '--sitemapid', metavar='', type=str, required=True,
         help='The FQDN ID of the sitemap entry in SQLite DB.')
 
@@ -35,9 +32,9 @@ if __name__ == "__main__":
     PATH = os.path.dirname(os.path.realpath(__file__))
 
     # check if warming sitemap or google analytics
-    if args.sitemapid is None and args.sitemapdb is None:
+    if args.sitemapid is None:
         print ('ERROR! You must specify the FQDN ID and '
-               'sitemap.db file argument to continue.')
+               'argument to continue.')
         sys.exit(-1)
 
     # check that .env exits and load variables
@@ -50,7 +47,7 @@ if __name__ == "__main__":
         os.environ.update(dotenv)
 
     # check that key exists
-    if args.id is not None and not os.path.isfile('%s/key.json' % PATH):
+    if not os.path.isfile('%s/key.json' % PATH):
         print ("ERROR! The key.json file could not be found in %s\n"
                "Review README.md for more information.") % PATH
         sys.exit(-1)
@@ -75,7 +72,7 @@ if __name__ == "__main__":
     crawler = Crawler()
     if args.sitemap is not None:
         offset = args.offset if (args.offset is not None) else 0
-        crawler.sitemap_crawler(args.sitemap, args.count, offset)
+        crawler.sqlite_sitemap_crawler(args.sitemapid, args.count, offset)
     else:
 	sys.exit(-1)	
 
