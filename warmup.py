@@ -47,10 +47,10 @@ if __name__ == "__main__":
         os.environ.update(dotenv)
 
     # check that key exists
-    if not os.path.isfile('%s/key.json' % PATH):
-        print ("ERROR! The key.json file could not be found in %s\n"
-               "Review README.md for more information.") % PATH
-        sys.exit(-1)
+    # if not os.path.isfile('%s/key.json' % PATH):
+    #     print ("ERROR! The key.json file could not be found in %s\n"
+    #            "Review README.md for more information.") % PATH
+    #     sys.exit(-1)
 
     # add to queue
     def add_to_queue(i, q):
@@ -70,9 +70,8 @@ if __name__ == "__main__":
     # start crawling
     started = time.time()
     crawler = Crawler()
-    if args.sitemap is not None:
-        offset = args.offset if (args.offset is not None) else 0
-        crawler.sqlite_sitemap_crawler(args.sitemapid, args.count, offset)
+    if args.sitemapid is not None:
+        crawler.sqlite_sitemap_crawler(args.sitemapid, args.count)
     else:
 	sys.exit(-1)	
 

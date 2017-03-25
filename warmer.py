@@ -64,7 +64,7 @@ class Crawler:
 		raise CrawlerError('ERROR - unable to decompress compress sitemap blog')
 	return sitemap_txt
 
-    def sqlite_sitemap_crawler(self, fqdn_id, limit, offset):
+    def sqlite_sitemap_crawler(self, fqdn_id, limit):
         limit = limit if (limit >= 0 and limit <= 10000) else 1000
 	db_name = config['node']['sitemap_db']
 	sitemap_txt = self.getSitemapTxtFromSQLite(db_name)
